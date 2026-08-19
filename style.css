@@ -275,7 +275,7 @@ body {
     transform: translateY(-50%);
     width: 55%;
     height: 90%;
-    background: url('/img/bg.png') no-repeat center right / contain;
+    background: url('./img/bg.png') no-repeat center right / contain;
     pointer-events: none;
     z-index: 1;
     filter: drop-shadow(0 0 30px rgba(255, 85, 0, 0.15));
