@@ -128,7 +128,7 @@ body {
     height: 100vh;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(8px);
-    z-index: 100;
+    z-index: 90; /* Ниже .header (100), см. пояснение у второй декларации ниже */
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
@@ -986,4 +986,67 @@ iframe {
     min-height: 350px;
     border: 0;
     border-radius: 12px;
+}
+
+/* ==========================================================================
+   Исправление мобильного меню и предотвращение размытия
+   ========================================================================== */
+
+/* 1. Прячем мобильное меню по умолчанию на всех экранах */
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Спрятано за правым краем */
+    width: 100%;
+    max-width: 320px;
+    height: 100vh;
+    background: rgba(20, 25, 35, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 1001; /* Выше оверлея */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: right 0.3s ease-in-out;
+    pointer-events: none; /* Не перехватывает клики в закрытом состоянии */
+}
+
+/* 2. Показываем меню только при наличии класса .open / .active */
+.mobile-menu.active,
+.mobile-menu.open {
+    right: 0;
+    pointer-events: auto; /* Включаем клики только когда меню открыто */
+}
+
+/* 3. Гарантируем четкость текста и кликабельность ссылок */
+.mobile-menu nav,
+.mobile-menu a,
+.mobile-menu button {
+    filter: none !important;
+    position: relative;
+    z-index: 1002;
+    color: var(--text-primary);
+}
+
+/* 4. Оверлей (затемнение фона за меню) */
+.overlay,
+.nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 90; /* Меньше z-index у .header (100), т.к. .nav лежит ВНУТРИ header
+                    и header — отдельный стекинг-контекст (sticky + z-index).
+                    Если поставить overlay >= 100, он перекроет весь header
+                    вместе с меню, т.к. идёт позже в DOM. */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.active,
+.nav-overlay.active {
+    pointer-events: auto;
 }
